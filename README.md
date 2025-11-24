@@ -5,6 +5,7 @@
 Este proyecto implementa un modelo de base de datos normalizado para el análisis del dataset Heart Disease 2020, enfocado en factores de riesgo cardiovascular y características de salud de la población.
 
 # 2- Estructura del Proyecto
+
 ```
 bigdata_act_2/
 ├── README.md
@@ -15,6 +16,7 @@ bigdata_act_2/
     ├── schema_spark_sql.sql     # DDL en Spark SQL
     └── schema_pyspark.py        # StructType en PySpark
 ```
+
 # 3- Diseño del Esquema de la Base de Datos
 
 ### 3.1 - Modelo de Datos (Unity Catalog)
@@ -138,7 +140,7 @@ Para implementar este esquema en Databricks se elaboró un cluster siguiendo los
 
 Empleamos el siguiente DDL en Spark SQL para crear el catálogo, schema y tablas en Databricks Unity Catalog:
 
-todo el siguiente código va en un notebook de Databricks con lenguaje SQL 
+todo el siguiente código va en un notebook de Databricks con lenguaje SQL
 
 ```SQL
 
@@ -164,7 +166,7 @@ WITH DBPROPERTIES (
     'created_by' = 'Jonathan Albués',
     'version' = '1.0'
 );
-````
+```
 
 Ver esquema completo en [`src/schema_spark_sql.sql`](src/schema_spark_sql.sql).
 
@@ -172,14 +174,13 @@ Ver esquema completo en [`src/schema_spark_sql.sql`](src/schema_spark_sql.sql).
 
 ![Descripción del esquema 1](doc/photo/descripcion_1.png)
 
---- 
+---
 
 ![Descripción del esquema 2](doc/photo/descripcion_2.png)
 
---- 
+---
 
 ![Descripción del esquema 3](doc/photo/descripcion_3.png)
-
 
 ## 5.2 - Obteniendo datos de kaggle
 
@@ -222,7 +223,4 @@ display(spark_df)
 
 ![Tabla temporal creada](doc/photo/Data_kaggle_4.png)
 
-
-
 # 6- Recursos Adicionales
-
