@@ -193,14 +193,13 @@ En este caso el dataset contaba con dos carpetas internas, cada una con un archi
 
 ![alt text](doc\photo\Datos_kaggle.png)
 
-usando pandas se cargó el archivo CSV y se realizó una inspección inicial de los datos para entender su estructura y contenido, usando Display() 
-```python
-# 3. Leer DF de las subcarpetas
-df2020 = pd.read_csv(csv_files[0])
-df2022 = pd.read_csv(csv_files[1])
-display(df2020.head())
-display(df2022.head())
-```
+usando pandas se cargó el archivo CSV y se realizó una inspección inicial de los datos para entender su estructura y contenido, usando Display()
+
+`# 3. Leer DF de las subcarpetas`
+`df2020 = pd.read_csv(csv_files[0])`
+`df2022 = pd.read_csv(csv_files[1])`
+`display(df2020.head())`
+`display(df2022.head())`
 
 ![alt text](doc\photo\Datos_kaggle_2.png)
 
@@ -209,6 +208,12 @@ Luego usando spark se cargaron los datos en un DataFrame de Spark para su poster
 ![alt text](doc\photo\Data_kaggle_3.png)
 
 
+Finalmente se realizó una tabla temportal llamada `heart_2020_cleaned`
+
+`spark_df.createTempView("heart_2020_cleaned")`
+`display(spark_df)`
+
+![alt text](doc\photo\Data_kaggle_4.png)
 
 
 
