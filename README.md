@@ -170,15 +170,15 @@ Ver esquema completo en [`src/schema_spark_sql.sql`](src/schema_spark_sql.sql).
 
 ### 5.1 - Mostrar la descripción del esquema y las tablas creadas
 
-![alt text](doc\photo\descripcion_1.png)
+![Descripción del esquema 1](doc/photo/descripcion_1.png)
 
 --- 
 
-![alt text](doc\photo\descripcion_2.png)
+![Descripción del esquema 2](doc/photo/descripcion_2.png)
 
 --- 
 
-![alt text](doc\photo\descripcion_3.png)
+![Descripción del esquema 3](doc/photo/descripcion_3.png)
 
 
 ## 5.2 - Obteniendo datos de kaggle
@@ -191,29 +191,36 @@ El código API de Kaggle se utilizó para descargar el dataset en formato ZIP y 
 
 En este caso el dataset contaba con dos carpetas internas, cada una con un archivo CSV diferente. En nuestro caso utilizamos el archivo `heart_2020_cleaned.csv` que se encontraba en la carpeta `2020`.
 
-![alt text](doc\photo\Datos_kaggle.png)
+![Datos descargados de Kaggle](doc/photo/Datos_kaggle.png)
 
-usando pandas se cargó el archivo CSV y se realizó una inspección inicial de los datos para entender su estructura y contenido, usando Display()
+Usando pandas se cargó el archivo CSV y se realizó una inspección inicial de los datos para entender su estructura y contenido, usando `display()`:
 
-`# 3. Leer DF de las subcarpetas`
-`df2020 = pd.read_csv(csv_files[0])`
-`df2022 = pd.read_csv(csv_files[1])`
-`display(df2020.head())`
-`display(df2022.head())`
+```python
+# 3. Leer DF de las subcarpetas
+df2020 = pd.read_csv(csv_files[0])
+df2022 = pd.read_csv(csv_files[1])
+display(df2020.head())
+display(df2022.head())
+```
 
-![alt text](doc\photo\Datos_kaggle_2.png)
+![Vista previa de datos con pandas](doc/photo/Datos_kaggle_2.png)
 
-Luego usando spark se cargaron los datos en un DataFrame de Spark para su posterior procesamiento y análisis. `spark_df = spark.createDataFrame(df2020)`
+Luego usando Spark se cargaron los datos en un DataFrame de Spark para su posterior procesamiento y análisis:
 
-![alt text](doc\photo\Data_kaggle_3.png)
+```python
+spark_df = spark.createDataFrame(df2020)
+```
 
+![DataFrame de Spark creado](doc/photo/Data_kaggle_3.png)
 
-Finalmente se realizó una tabla temportal llamada `heart_2020_cleaned`
+Finalmente se creó una tabla temporal llamada `heart_2020_cleaned`:
 
-`spark_df.createTempView("heart_2020_cleaned")`
-`display(spark_df)`
+```python
+spark_df.createTempView("heart_2020_cleaned")
+display(spark_df)
+```
 
-![alt text](doc\photo\Data_kaggle_4.png)
+![Tabla temporal creada](doc/photo/Data_kaggle_4.png)
 
 
 
