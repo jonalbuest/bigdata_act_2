@@ -1,5 +1,9 @@
 # **Big Data - Actividad 2: Heart Disease 2020 Dataset**
 
+Toda la documentación y código fuente asociado a la Actividad 2 del curso de Big Data, centrada en el diseño e implementación de un modelo de base de datos normalizado para el análisis del dataset Heart Disease 2020.
+
+Revisar Notebook: [src/Actividad_2_Procesamiento_Infraestructura_Cloud.ipynb](src/Actividad_2_Procesamiento_Infraestructura_Cloud.ipynb)
+
 # 1- Descripción del Proyecto
 
 Este proyecto implementa un modelo de base de datos normalizado para el análisis del dataset Heart Disease 2020, enfocado en factores de riesgo cardiovascular y características de salud de la población.
@@ -223,4 +227,192 @@ display(spark_df)
 
 ![Tabla temporal creada](doc/photo/Data_kaggle_4.png)
 
+Contar los registros del DataFrame:
 
+![alt text](doc/photo/Data_kaggle_5.png)
+
+### 5.3 - Creación de IDs únicos para cada registro
+
+```python
+from pyspark.sql.functions import row_number, monotonically_increasing_id, col
+from pyspark.sql.window import Window
+
+# Generar IDs únicos para cada registro
+window_spec = Window.orderBy(monotonically_increasing_id())
+df_with_id = spark_df.withColumn("id_persona", row_number().over(window_spec))
+
+print(f"IDs generados para {df_with_id.count():,} registros")
+df_with_id.select("id_persona", "Sex", "AgeCategory", "BMI", "HeartDisease").show(10)
+
+```
+
+### 5.4 - Filtrado de DataFrame para las tablas PERSONA, HABITOS, CONDICIONES_MEDICAS y SALUD_CARDIACA
+
+Tabla PERSONA:
+
+![Generación de IDs únicos](doc/photo/Data_kaggle_6.png)
+
+Tabla HABITOS:
+
+![Filtrado para tabla HABITOS](doc/photo/Data_kaggle_7.png)
+
+Tabla CONDICIONES_MEDICAS:
+
+![Filtrado para tabla CONDICIONES_MEDICAS](doc/photo/Data_kaggle_8.png)
+
+Tabla SALUD_CARDIACA:
+
+![Filtrado para tabla SALUD_CARDIACA](doc/photo/Data_kaggle_9.png)
+
+---
+
+## 6- Validación y Análisis Exploratorio de Datos (EDA)
+
+### 6.1 - Metadatos
+
+**Propósito:** Verificar estructura de tablas, tipos de datos y restricciones.
+
+- **DESCRIBE TABLE**: Valida columnas, tipos (INT, STRING, DOUBLE) y PRIMARY KEYs
+- **SHOW CREATE TABLE**: Confirma DDL completo y formato Delta Lake
+- **printSchema()**: Verifica esquema en Spark DataFrame
+
+### 6.2 - Descripción de Datos
+
+**Propósito:** Detectar anomalías y entender distribuciones numéricas.
+
+- **describe()**: Estadísticas (count, mean, stddev, min, max) - BMI promedio: 28.32 (sobrepeso)
+
+![alt text](doc/photo/descripcion_std_pySpark.png)
+
+
+- **Funciones SQL**: AVG, STDDEV, PERCENTILE - Mediana BMI: 27.34 (distribución sesgada derecha)
+
+![alt text](doc/photo/descripcion_std_pySpark_2.png)
+
+### 6.3 - Consultas SELECT y GROUP BY
+
+**Propósito:** Validar integridad referencial y distribuciones categóricas.
+
+- **SQL GROUP BY**: Enfermedades cardíacas por sexo (Hombres: 10.62% vs Mujeres: 6.69%)
+
+![alt text](doc/photo/Consultas_SELECT_BYGROUP.png)
+
+- **PySpark equivalente**: Mismos resultados - confirma consistencia entre interfaces
+![alt text](doc/photo/Consulta_Pyspark_Groupby.png)
+
+
+### 6.4 - Conteos y Muestras
+
+**Propósito:** Confirmar carga completa sin pérdida de datos.
+
+- **COUNT(\*)**: Las 4 tablas tienen 319,795 registros (relación 1:1 verificada)
+- **LIMIT + WHERE**: Muestreo de casos específicos (ej: HeartDisease = 'Yes')
+- **Filtros PySpark**: ~15,000 personas con obesidad + enfermedad cardíaca
+
+---
+
+## 7- Comparación: SQL vs Spark (PySpark)
+
+### 7.1 - Sistema de Puntuación por Criterio
+
+Escala: ⭐⭐⭐⭐⭐ (5 estrellas = excelente, 1 estrella = limitado)
+
+| Criterio                      | SQL        | Spark (PySpark) | Ganador      |
+| ----------------------------- | ---------- | --------------- | ------------ |
+| **Facilidad de uso**          | ⭐⭐⭐⭐⭐ | ⭐⭐⭐          | 🏆 **SQL**   |
+| **Curva de aprendizaje**      | ⭐⭐⭐⭐⭐ | ⭐⭐            | 🏆 **SQL**   |
+| **Escalabilidad**             | ⭐⭐       | ⭐⭐⭐⭐⭐      | 🏆 **Spark** |
+| **Procesamiento distribuido** | ⭐         | ⭐⭐⭐⭐⭐      | 🏆 **Spark** |
+| **Integración con BI**        | ⭐⭐⭐⭐⭐ | ⭐⭐⭐          | 🏆 **SQL**   |
+| **UDFs personalizadas**       | ⭐⭐       | ⭐⭐⭐⭐⭐      | 🏆 **Spark** |
+| **Pipelines complejos**       | ⭐⭐       | ⭐⭐⭐⭐⭐      | 🏆 **Spark** |
+| **Machine Learning**          | ⭐         | ⭐⭐⭐⭐⭐      | 🏆 **Spark** |
+| **Optimización automática**   | ⭐⭐⭐⭐⭐ | ⭐⭐⭐          | 🏆 **SQL**   |
+| **Portabilidad de código**    | ⭐⭐⭐⭐⭐ | ⭐⭐⭐          | 🏆 **SQL**   |
+| **Debugging**                 | ⭐⭐⭐     | ⭐⭐⭐⭐⭐      | 🏆 **Spark** |
+| **Integración con Python**    | ⭐⭐       | ⭐⭐⭐⭐⭐      | 🏆 **Spark** |
+
+#### 📊 Puntuación Total:
+
+- **SQL:** 37/60 estrellas ⭐ (61.7%)
+- **Spark (PySpark):** 46/60 estrellas ⭐ (76.7%)
+
+---
+
+### 7.2 - Análisis por Caso de Uso
+
+#### 🎯 Cuándo usar **SQL** (5 casos ideales):
+
+1. ⭐⭐⭐⭐⭐ **Análisis exploratorio rápido** - Sintaxis simple, resultados inmediatos
+2. ⭐⭐⭐⭐⭐ **Reportes para stakeholders** - Universalmente entendido
+3. ⭐⭐⭐⭐⭐ **Integración con dashboards BI** - Compatible con Tableau, Power BI
+4. ⭐⭐⭐⭐⭐ **Consultas ad-hoc simples** - Menos verboso que PySpark
+5. ⭐⭐⭐⭐ **Validación de datos** - DESCRIBE, COUNT, GROUP BY intuitivos
+
+#### 🚀 Cuándo usar **Spark (PySpark)** (5 casos ideales):
+
+1. ⭐⭐⭐⭐⭐ **Procesamiento masivo (>100GB)** - Escalabilidad distribuida nativa
+2. ⭐⭐⭐⭐⭐ **Pipeline ETL automatizado** - Reutilización de código, control de flujo
+3. ⭐⭐⭐⭐⭐ **Machine Learning** - MLlib integrado (clasificación, regresión, clustering)
+4. ⭐⭐⭐⭐⭐ **Transformaciones complejas** - UDFs con cualquier librería Python
+5. ⭐⭐⭐⭐⭐ **Integración con ecosistema Python** - pandas, numpy, scikit-learn
+
+---
+
+### 7.3 - Ventajas y Limitaciones
+
+#### ✅ **SQL - Ventajas**
+
+- ⭐⭐⭐⭐⭐ Sintaxis declarativa universalmente conocida
+- ⭐⭐⭐⭐⭐ Catalyst Optimizer automático (sin ajustes manuales)
+- ⭐⭐⭐⭐⭐ Portabilidad entre plataformas (Databricks, Snowflake, BigQuery)
+- ⭐⭐⭐⭐ Window functions intuitivas (PERCENTILE, RANK, ROW_NUMBER)
+
+#### ❌ **SQL - Limitaciones**
+
+- ⭐⭐ UDFs limitadas según motor SQL (no estándar)
+- ⭐⭐ Difícil mantener pipelines multi-etapa
+- ⭐ Sin capacidades ML nativas
+- ⭐⭐ Escalabilidad limitada sin cluster distribuido
+
+#### ✅ **Spark (PySpark) - Ventajas**
+
+- ⭐⭐⭐⭐⭐ Procesamiento distribuido con miles de nodos
+- ⭐⭐⭐⭐⭐ APIs ricas (DataFrame/RDD) con control fino
+- ⭐⭐⭐⭐⭐ UDFs flexibles con cualquier librería Python
+- ⭐⭐⭐⭐⭐ MLlib integrado para Machine Learning
+- ⭐⭐⭐⭐ Type safety y validación en IDE
+
+#### ❌ **Spark (PySpark) - Limitaciones**
+
+- ⭐⭐ Curva de aprendizaje pronunciada
+- ⭐⭐⭐ Requiere ajustes manuales de rendimiento (cache, repartition)
+- ⭐⭐⭐ Menos portable que SQL puro
+- ⭐⭐ Más verboso para consultas simples
+
+---
+
+### 7.4 - Mejor Práctica: Combinar SQL y PySpark ⭐⭐⭐⭐⭐
+
+```python
+# 1. Usar PySpark para transformaciones complejas
+df_cleaned = spark_df.filter(col("BMI").isNotNull()) \
+                     .withColumn("obesity", when(col("BMI") > 30, 1).otherwise(0))
+
+# 2. Guardar como tabla temporal
+df_cleaned.createOrReplaceTempView("temp_cleaned")
+
+# 3. Usar SQL para análisis final (más legible)
+result = spark.sql("""
+    SELECT
+        AgeCategory,
+        AVG(obesity) as tasa_obesidad,
+        COUNT(*) as total
+    FROM temp_cleaned
+    GROUP BY AgeCategory
+    ORDER BY tasa_obesidad DESC
+""")
+display(result)
+```
+
+**Resultado:** Lo mejor de ambos mundos 🚀 (Puntuación combinada: ⭐⭐⭐⭐⭐)
