@@ -223,4 +223,4 @@ display(spark_df)
 
 ![Tabla temporal creada](doc/photo/Data_kaggle_4.png)
 
-# 6- Recursos Adicionales
+
