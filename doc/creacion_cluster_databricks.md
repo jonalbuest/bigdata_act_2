@@ -5,19 +5,19 @@
 1. En el menú lateral izquierdo, haz clic en **"Compute"** o **"Clusters"**
 2. Se mostrará la lista de clusters existentes (si los hay)
 
-**![alt text](photo\image.png)** 
+**![alt text](photo/image.png)** 
 
 ### Paso 1.2: Iniciar la Creación del Cluster
 
 1. Haz clic en el botón **"Create Compute"**
 
 
-**![alt text](photo\image-1.png)**
+**![alt text](photo/image-1.png)**
 
 
 2. Se abrirá el formulario de configuración del cluster
 
-**![alt text](photo\image-2.png)**
+**![alt text](photo/image-2.png)**
 ---
 
 ## 2. Configuración del Cluster
@@ -30,7 +30,7 @@ Completar los siguientes campos en el formulario:
 
 - Ingresa un nombre descriptivo para tu cluster
 
-![alt text](photo\image-3.png)
+![alt text](photo/image-3.png)
 
 
 - **Ejemplo**: `heart-disease-analysis-cluster`
@@ -60,7 +60,7 @@ Completar los siguientes campos en el formulario:
 
 **Para este proyecto**: Runtime 15.4 LTS (incluye Spark 3.4.x y Python 3.10)
 
-**![alt text](photo\image-4.png)**
+**![alt text](photo/image-4.png)**
 
 
 **Características del Runtime seleccionado**:
@@ -76,7 +76,7 @@ Completar los siguientes campos en el formulario:
 - **Standard** (Azure): 4 cores, 14 GB RAM - Ideal para desarrollo
 
 
-**![alt text](photo\image-5.png)**
+**![alt text](photo/image-5.png)**
 
 
 ---
@@ -90,7 +90,7 @@ Completar los siguientes campos en el formulario:
 2. Haz clic en el botón **"Create Cluster"** o **"Crear Cluster"** al final del formulario
 3. El cluster comenzará a crearse, hasta que su estado cambie a **Running** o un chulito verde aparezca junto al nombre del cluster
 
-**![alt text](photo\image-6.png)**
+**![alt text](photo/image-6.png)**
 
 ### Paso 3.2: Monitorear el Estado de Creación
 
@@ -109,7 +109,7 @@ El cluster pasará por los siguientes estados:
 
 **Tiempo estimado**: 3-5 minutos
 
-**![alt text](photo\image-7.png)**
+**![alt text](photo/image-7.png)**
 
 ### Paso 3.2: Verificar Configuración del Cluster
 
@@ -125,7 +125,7 @@ Una vez que el cluster esté en estado **Running**:
 
 La imagen a continuación muestra un ejemplo de un cluster de databricks gratuito, lamentablemente la versión gratuita no permite configurar Unity Catalog y observar los detalles completos. 
 
-**![alt text](photo\image-8.png)**
+**![alt text](photo/image-8.png)**
 
 ### Paso 3.3: Probar el Cluster
 
@@ -147,7 +147,7 @@ df = spark.createDataFrame(data, ["id", "message"])
 df.show()
 ```
 
-**![alt text](photo\image-9.png)**
+**![alt text](photo/image-9.png)**
 
 ---
 
